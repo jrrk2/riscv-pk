@@ -221,6 +221,12 @@ __trap_from_machine_mode:
   j restore_regs
 
 do_reset:
+        la x1, _bss_start
+        la x2, _end
+_clr:   sd x0, 0(x1)
+        sd x0, 8(x1)
+        addi x1, x1, 16
+        blt x1, x2, _clr
   li x1, 0
   li x2, 0
   li x3, 0
@@ -231,8 +237,8 @@ do_reset:
   li x8, 0
   li x9, 0
 // save a0 and a1; arguments from previous boot loader stage:
-//  li x10, 0
-//  li x11, 0
+  li x10, 0
+  li x11, 0x40006670 // from boot ROM ..
   li x12, 0
   li x13, 0
   li x14, 0
